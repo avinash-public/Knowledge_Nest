@@ -12,19 +12,45 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+        // This automatically detects if you are on localhost:5173 or my-app.netlify.app
+        redirectTo: window.location.origin 
+      }
     });
     if (error) alert(error.message);
   };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+
+    // 1. Perform Login
+    const { data: { user }, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) alert(error.message);
-    else navigate('/');
+
+    if (error) {
+      alert(error.message);
+      setLoading(false);
+      return;
+    }
+
+    if (user) {
+      // 2. Check Role in Database
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      // 3. Redirect based on Role
+      if (profile?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    }
+    
     setLoading(false);
   };
 

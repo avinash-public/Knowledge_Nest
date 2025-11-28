@@ -1,7 +1,47 @@
-import { Link } from 'react-router-dom';
-import { Star, ArrowLeft, Calendar, BookOpen, MessageCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import type { Book } from '../types';
+import { Star, ArrowLeft, Calendar, BookOpen, Loader } from 'lucide-react';
 
 const BookDetails = () => {
+  const { id } = useParams();
+  const [book, setBook] = useState<Book | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      if (!id) return;
+      
+      const { data, error } = await supabase
+        .from('books')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching book:", error);
+      } else {
+        setBook(data);
+      }
+      setLoading(false);
+    };
+
+    fetchBook();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <Loader className="animate-spin text-brand-500" size={40} />
+      </div>
+    );
+  }
+
+  if (!book) {
+    return <div className="text-center py-20">Book not found.</div>;
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Back Button */}
@@ -16,8 +56,8 @@ const BookDetails = () => {
           {/* Left Column: Cover Image */}
           <div className="bg-gray-100 p-8 flex items-center justify-center border-r border-gray-100">
             <img 
-              src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=800" 
-              alt="Book Cover" 
+              src={book.coverUrl}  // Fixed: using correct camelCase property from Book type
+              alt={book.title} 
               className="w-48 shadow-lg rounded-md transform hover:scale-105 transition-transform duration-500"
             />
           </div>
@@ -26,49 +66,47 @@ const BookDetails = () => {
           <div className="col-span-2 p-8 md:p-10 space-y-6">
             <div>
               <div className="flex justify-between items-start">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Clean Code</h1>
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                  Available
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${book.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  {book.available ? 'Available' : 'Rented Out'}
                 </span>
               </div>
-              <p className="text-xl text-gray-500">by Robert C. Martin</p>
+              <p className="text-xl text-gray-500">by {book.author}</p>
             </div>
 
             {/* Stats Row */}
             <div className="flex gap-6 border-y border-gray-100 py-4">
               <div className="flex items-center gap-2">
                 <Star className="text-yellow-400 fill-current" size={20} />
-                <span className="font-bold text-gray-900">4.8</span>
-                <span className="text-gray-400 text-sm">(124 reviews)</span>
+                <span className="font-bold text-gray-900">{book.rating}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <Calendar size={20} />
-                <span>Pub: 2008</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <MessageCircle size={20} />
-                <span>12 Discussions</span>
+                <span>{book.category}</span>
               </div>
             </div>
 
-            {/* Synopsis */}
+            {/* Description */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">Synopsis</h3>
               <p className="text-gray-600 leading-relaxed">
-                Even bad code can function. But if code isn't clean, it can bring a development organization to its knees. 
-                Every year, countless hours and significant resources are lost because of poorly written code. 
-                But it doesn't have to be that way.
+                {"description" in book && typeof book.description === "string" && book.description.trim().length > 0
+                  ? book.description
+                  : "No description available for this book."}
               </p>
             </div>
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-4">
-              <button className="flex-1 bg-brand-500 text-white py-3 px-6 rounded-xl font-semibold hover:bg-brand-600 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-brand-500/30">
+              <button 
+                disabled={!book.available}
+                className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 shadow-lg 
+                  ${book.available 
+                    ? 'bg-brand-500 text-white hover:bg-brand-600 shadow-brand-500/30' 
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
+              >
                 <BookOpen size={20} />
-                Rent This Book
-              </button>
-              <button className="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:border-brand-500 hover:text-brand-500 transition-all">
-                Add to List
+                {book.available ? 'Rent This Book' : 'Currently Unavailable'}
               </button>
             </div>
           </div>

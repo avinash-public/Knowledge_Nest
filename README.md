@@ -12,7 +12,7 @@
 Book Knowledge Nest utilizes a **Headless Architecture** where the frontend is completely decoupled from the data layer. We leverage **Supabase** for immediate, secure authentication and data persistence.
 
 ### High-Level System Design
-```mermaid
+```
 graph TD
     Client[User / Browser] -->|HTTPS| CDN[Vite / Edge Network]
     Client -->|REST / Realtime| Auth[Supabase Auth]

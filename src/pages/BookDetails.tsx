@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Star, ArrowLeft, Calendar, BookOpen, MessageCircle } from 'lucide-react';
+import { Star, ArrowLeft, Calendar, BookOpen, MessageKnowledge Nest } from 'lucide-react';
 
 const BookDetails = () => {
   return (
@@ -46,7 +46,7 @@ const BookDetails = () => {
                 <span>Pub: 2008</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
-                <MessageCircle size={20} />
+                <MessageKnowledge Nest size={20} />
                 <span>12 Discussions</span>
               </div>
             </div>

@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { ShieldCheck, Users, Book, Activity } from 'lucide-react';
+import { ShieldCheck, Users,Plus } from 'lucide-react';
+import AddBookForm from '../components/AddbookForm';
+import BookTable from '../components/BookTable';
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
+  const [showAddBook, setShowAddBook] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      {/* Admin Header */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
@@ -23,9 +27,10 @@ const AdminDashboard = () => {
         </button>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid (Keep existing code) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+         {/* ... (Keep your stats blocks here) ... */}
+         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-50 rounded-lg"><Users className="text-blue-500" /></div>
             <div>
@@ -34,28 +39,35 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-50 rounded-lg"><Book className="text-green-500" /></div>
-            <div>
-              <p className="text-sm text-gray-500">Total Books</p>
-              <h3 className="text-2xl font-bold">856</h3>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-purple-50 rounded-lg"><Activity className="text-purple-500" /></div>
-            <div>
-              <p className="text-sm text-gray-500">Active Rentals</p>
-              <h3 className="text-2xl font-bold">124</h3>
-            </div>
-          </div>
-        </div>
+        {/* ... etc ... */}
       </div>
 
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center text-gray-400">
-        User Management Table Coming Soon...
+      {/* MANAGEMENT SECTION */}
+      <div className="mb-8 flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-800">Library Management</h2>
+        <button 
+          onClick={() => setShowAddBook(!showAddBook)}
+          className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition"
+        >
+          <Plus size={20} />
+          {showAddBook ? 'Close Form' : 'Add New Book'}
+        </button>
+      </div>
+
+      {/* Conditionally Show Form */}
+      {showAddBook && (
+        <div className="mb-8">
+          <AddBookForm 
+            onSuccess={() => setShowAddBook(false)} 
+            onCancel={() => setShowAddBook(false)} 
+          />
+        </div>
+      )}
+      
+
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Book Inventory</h2>
+        <BookTable />
       </div>
     </div>
   );

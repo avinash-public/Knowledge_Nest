@@ -6,12 +6,12 @@ import { supabase } from '../lib/supabase';
 const AdminRoute = () => {
   const { session, loading: authLoading } = useAuth();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [checkingRole, setCheckingRole] = useState(true);
 
   useEffect(() => {
     const checkAdmin = async () => {
       if (session?.user.id) {
-        // Query the 'profiles' table we created in Step 1
+        console.log("Checking admin role for:", session.user.email);
         const { data } = await supabase
           .from('profiles')
           .select('role')
@@ -20,21 +20,31 @@ const AdminRoute = () => {
 
         setIsAdmin(data?.role === 'admin');
       }
-      setLoading(false);
+      setCheckingRole(false);
     };
 
-    if (!authLoading) checkAdmin();
+    if (!authLoading && session) {
+      checkAdmin();
+    }
   }, [session, authLoading]);
 
-  if (authLoading || loading) return <div className="p-10 text-center">Checking permissions...</div>;
+  // 1. Show loading text instead of white screen
+  if (authLoading || checkingRole) {
+    return <div className="p-10 text-center text-xl font-bold">Verifying Admin Access...</div>;
+  }
 
-  // If not logged in, go to Login
-  if (!session) return <Navigate to="/login" replace />;
+  // 2. If not logged in -> Login
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
 
-  // If logged in but NOT admin, go to Home
-  if (!isAdmin) return <Navigate to="/" replace />;
+  // 3. If logged in but NOT admin -> Home
+  if (!isAdmin) {
+    console.log("User is not admin, redirecting home.");
+    return <Navigate to="/" replace />;
+  }
 
-  // If admin, show the page
+  // 4. If Admin -> Show the page
   return <Outlet />;
 };
 

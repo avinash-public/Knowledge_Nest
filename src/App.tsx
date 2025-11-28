@@ -10,6 +10,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import RentBook from './pages/RentBook';
+import RentalSuccess from './pages/RentalSuccess';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
               <Route path="book/:id" element={<BookDetails />} />
+              <Route path="/rental-success" element={<RentalSuccess />} />
+              <Route path="rent/:id" element={<RentBook />} />
             </Route>
           </Route>
           

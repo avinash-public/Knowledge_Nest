@@ -13,7 +13,7 @@ const BookCard = ({ book }: BookCardProps) => {
       {/* Book Cover Area */}
       <div className="h-48 bg-gray-200 relative overflow-hidden">
         <img 
-          src={book.coverUrl} 
+          src={book.cover_url} 
           alt={book.title} 
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import type { Book } from '../types';
 import { Star, ArrowLeft, Calendar, BookOpen, Loader } from 'lucide-react';
 
 const BookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -56,7 +57,7 @@ const BookDetails = () => {
           {/* Left Column: Cover Image */}
           <div className="bg-gray-100 p-8 flex items-center justify-center border-r border-gray-100">
             <img 
-              src={book.coverUrl}  // Fixed: using correct camelCase property from Book type
+              src={book.cover_url}  // <--- FIXED: Must match database column name (snake_case)
               alt={book.title} 
               className="w-48 shadow-lg rounded-md transform hover:scale-105 transition-transform duration-500"
             />
@@ -90,15 +91,14 @@ const BookDetails = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">Synopsis</h3>
               <p className="text-gray-600 leading-relaxed">
-                {"description" in book && typeof book.description === "string" && book.description.trim().length > 0
-                  ? book.description
-                  : "No description available for this book."}
+                {book.description || "No description available for this book."}
               </p>
             </div>
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-4">
               <button 
+                onClick={() => navigate(`/rent/${book.id}`)}
                 disabled={!book.available}
                 className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 shadow-lg 
                   ${book.available 

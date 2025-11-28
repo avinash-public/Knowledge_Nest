@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Lock, CheckKnowledge Nest } from 'lucide-react';
+import { Lock, CheckCircle } from 'lucide-react';
 
 const UpdatePassword = () => {
   const [password, setPassword] = useState('');
@@ -34,7 +34,7 @@ const UpdatePassword = () => {
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl">
         <div className="text-center mb-8">
           <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckKnowledge Nest className="text-green-600" size={32} />
+            <CheckCircle  className="text-green-600" size={32} />
           </div>
           <h2 className="text-3xl font-bold text-gray-900">New Password</h2>
           <p className="text-gray-500 mt-2">Create a secure password for your account</p>

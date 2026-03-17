@@ -7,6 +7,7 @@ const AddBookForm = ({ onSuccess, onCancel }: { onSuccess: () => void; onCancel:
   const [formData, setFormData] = useState({
     title: '',
     author: '',
+    price: '',
     category: '',
     cover_url: '',
     description: '',
@@ -23,6 +24,7 @@ const AddBookForm = ({ onSuccess, onCancel }: { onSuccess: () => void; onCancel:
         {
           title: formData.title,
           author: formData.author,
+          price: Number(formData.price),
           category: formData.category,
           cover_url: formData.cover_url || 'https://via.placeholder.com/400x600?text=No+Cover', // Default image
           description: formData.description,
@@ -79,6 +81,19 @@ const AddBookForm = ({ onSuccess, onCancel }: { onSuccess: () => void; onCancel:
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+            <input
+              required
+              type="number"
+              min={0}
+              step="0.01"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500"
+              value={formData.price}
+              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              placeholder="e.g. 199"
+            />
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select 
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500"
@@ -92,15 +107,16 @@ const AddBookForm = ({ onSuccess, onCancel }: { onSuccess: () => void; onCancel:
               <option value="Literature">Literature</option>
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image URL</label>
-            <input 
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500"
-              value={formData.cover_url}
-              onChange={(e) => setFormData({...formData, cover_url: e.target.value})}
-              placeholder="https://..."
-            />
-          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image URL</label>
+          <input 
+            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500"
+            value={formData.cover_url}
+            onChange={(e) => setFormData({...formData, cover_url: e.target.value})}
+            placeholder="https://..."
+          />
         </div>
 
         <div>

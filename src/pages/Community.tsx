@@ -61,7 +61,7 @@ const Community = () => {
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Knowledge Feed</h1>
-        <p className="text-gray-600 mt-2">Discuss books, ask for recommendations, and share what you're learning.</p>
+        <p className="text-gray-600 mt-2">Discuss books, ask for recommendations, and share what you're learning.(Currently under development)</p>
       </div>
 
       {/* Write a Post Box */}

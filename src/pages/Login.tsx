@@ -55,7 +55,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex    bg-blue-0">
       {/* Left Side - Hero Image */}
       <div className="hidden lg:flex w-1/2 bg-brand-900 justify-center items-center relative overflow-hidden">
         <div className="absolute inset-0 bg-brand-500/20 mix-blend-multiply" />
@@ -96,7 +96,6 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Password Input with Forgot Password Link */}
               <div>
                 <div className="flex justify-between items-center mb-1">
                     <label className="block text-sm font-medium text-gray-700">Password</label>

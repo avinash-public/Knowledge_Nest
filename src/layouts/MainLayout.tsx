@@ -16,7 +16,7 @@ const MainLayout = () => {
             </div>
             
             <div className="hidden md:flex space-x-8 items-center">
-              <Link to="/home" className="hover:text-brand-500 transition">Browse Books</Link>
+              <Link to="/#" className="hover:text-brand-500 transition">Browse Books</Link>
               <Link to="/community" className="hover:text-brand-500 transition">Community</Link>
             </div>
 
